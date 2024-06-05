@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LauncherArguments=$1
+HabboClientName=""
 
 github_page="https://github.com/asyzx/Habbo-Linux-Launcher"
 adobe_air_url="https://airsdk.harman.com"
@@ -42,6 +43,8 @@ else
     RemoteFlashVersion=${RemoteFlashVersion%%'"'*}
     RemoteUnityVersion=${RemoteClientData#*'"unity-windows-version":"'}
     RemoteUnityVersion=${RemoteUnityVersion%%'"'*}
+    echo $RemoteFlashVersion
+    echo $RemoteUnityVersion
 fi
 
 update_version_file(){
@@ -254,13 +257,10 @@ show_initial_menu(){
 }
 
 check_arguments(){
-    if [[ "$LauncherArguments" == *"token="* ]]; then
-        LauncherServer=$LauncherArguments
-        LauncherServer=${LauncherServer#*'server='}
-        LauncherServer=${LauncherServer%%'&'*}
-        LauncherTicket=$LauncherArguments
-        LauncherTicket=${LauncherTicket#*'token='}
-        LauncherTicket=${LauncherTicket%%'&'*}
+    if [[ "$LauncherArguments" =~ server=([^\&]+)\&token=([^\.]+\.[^\.]+)\.([^\.]+) ]]; then
+        LauncherServer=${BASH_REMATCH[1]}
+        LauncherTicket=${BASH_REMATCH[2]}
+        HabboClientName=${BASH_REMATCH[3]}
         LauncherArguments="-server $LauncherServer -ticket $LauncherTicket"
     else
         LauncherArguments=""
