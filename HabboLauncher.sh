@@ -171,9 +171,9 @@ build_native_version(){
 
         CertOutput=$($app_path/AdobeAIR\ SDK/bin/adt -certificate -cn SelfSign -ou QE -o 'Example, Co' -c US 2048-RSA newcert.p12 cert_password)
 
-        BuildOutput=$($app_path/AdobeAIR\ SDK/bin/adt -package -storetype pkcs12 -keystore newcert.p12 -storepass cert_password -target bundle Native HabboWin/META-INF/AIR/application.xml -C HabboWin HabboAir.swf local_include icon16.png icon32.png icon48.png icon128.png icon256.png habbo_logo.png)
+        BuildOutput=$($app_path/AdobeAIR\ SDK/bin/adt -package -storetype pkcs12 -keystore newcert.p12 -storepass cert_password -tsa http://timestamp.digicert.com -target bundle Native HabboWin/META-INF/AIR/application.xml -C HabboWin HabboAir.swf local_include icon16.png icon32.png icon48.png icon128.png icon256.png habbo_logo.png)
 
-        if [ $? -ne 0 ]; then
+        if [ $? -eq 0 ]; then
            LocalNativeVersion=$RemoteFlashVersion
            update_version_file
            cp -R HabboWin/META-INF Native
@@ -199,7 +199,7 @@ check_native_version(){
 launch_classic_version(){
     execFile="$app_path/HabboWin/Habbo.exe"
 
-    if [! -f $execFile ]; then
+    if ! [ -f $execFile ]; then
         LocalFlashVersion="0"
     fi
 
@@ -211,7 +211,7 @@ launch_unity_version(){
     
     execFile="$app_path/StandaloneWindows/habbo2020-global-prod.exe"
 
-    if [! -f $execFile ]; then
+    if ! [ -f $execFile ]; then
         LocalUnityVersion="0"
     fi
 
@@ -223,7 +223,7 @@ launch_native_version(){
     
     execFile="$app_path/Native/Habbo"
 
-    if [! -f $execFile ]; then
+    if ! [ -f $execFile ]; then
         LocalNativeVersion="1"
     fi
 
